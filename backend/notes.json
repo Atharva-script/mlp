@@ -1,0 +1,112 @@
+[
+  {
+    "id": "155728679",
+    "username": "Atharva-script",
+    "displayName": "Atharva",
+    "provider": "github"
+  },
+  {
+    "id": "122108250230923765",
+    "username": null,
+    "displayName": "Ash Sharma",
+    "provider": "facebook"
+  },
+  {
+    "id": "102110856026929021761",
+    "username": "A t h a r v a",
+    "displayName": "A t h a r v a",
+    "emails": [
+      {
+        "value": "atharvwagh81@gmail.com",
+        "verified": true
+      }
+    ],
+    "provider": "google"
+  },
+  {
+    "id": "atharvwagh81@gmail.com",
+    "username": "atharvwagh81@gmail.com",
+    "displayName": "sssssdnsmdnsmd dnmdnsnddsds",
+    "emails": [
+      {
+        "value": "atharvwagh81@gmail.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148526",
+    "gender": "Male",
+    "location": "Panvel"
+  },
+  {
+    "id": "hjghjg79797@gmail.com",
+    "username": "hjghjg79797@gmail.com",
+    "displayName": "Atharvmam mam",
+    "emails": [
+      {
+        "value": "hjghjg79797@gmail.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148526",
+    "gender": "Female",
+    "location": "mm"
+  },
+  {
+    "id": "sdhsdkhk@hsjdgsd.com",
+    "username": "sdhsdkhk@hsjdgsd.com",
+    "displayName": "ldslds skdsdk",
+    "emails": [
+      {
+        "value": "sdhsdkhk@hsjdgsd.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148256",
+    "gender": "Female",
+    "location": "sdd"
+  },
+  {
+    "id": "nsdlk@hjkjk.com",
+    "username": "nsdlk@hjkjk.com",
+    "displayName": "sdsdsdsdsdsdsd sddsd",
+    "emails": [
+      {
+        "value": "nsdlk@hjkjk.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148526",
+    "gender": "Male",
+    "location": "jljl"
+  },
+  {
+    "id": "atharvwagh81@gamil.com",
+    "username": "atharvwagh81@gamil.com",
+    "displayName": "fssfsf lsdsjd",
+    "emails": [
+      {
+        "value": "atharvwagh81@gamil.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148256",
+    "gender": "Female",
+    "location": "pp",
+    "password": "Imherealso@90"
+  },
+  {
+    "id": "lol@gmail.com",
+    "username": "lol@gmail.com",
+    "displayName": "snkldnsdnksldn sndsndlksndk",
+    "emails": [
+      {
+        "value": "lol@gmail.com"
+      }
+    ],
+    "provider": "local",
+    "phone": "9082148526",
+    "gender": "Male",
+    "location": "panvel",
+    "password": "HELLO@12"
+  }
+]

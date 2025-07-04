@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100vh;
+      overflow-y: auto;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+      position: relative;
+    }
+    /* Abstract shapes (optional, for background effect) */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 1;
+      filter: blur(2px);
+    }
+    .bg-shape1 { width: 300px; height: 300px; background: #fff; top: 5%; left: 5%; }
+    .bg-shape2 { width: 200px; height: 200px; background: #90caf9; top: 60%; left: 70%; }
+    .bg-shape3 { width: 150px; height: 150px; background: #1976d2; top: 80%; left: 10%; }
+    .bg-shape4 { width: 100px; height: 100px; background: #fff; top: 30%; left: 80%; }
+    .login-container {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 3rem 2.5rem 2.5rem 2.5rem;
+      max-width: 440px;
+      min-height: 600px;
+      width: 100%;
+      color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .glass-card h2 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1.7rem;
+    }
+    .glass-card .form-label {
+      color: #fff;
+      font-weight: 500;
+      text-align: left;
+      width: 100%;
+    }
+    .glass-card .form-control {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .glass-card .form-control::placeholder {
+      color: #fff;
+      opacity: 0.8;
+    }
+    .glass-card .form-control:focus {
+      background: rgba(255,255,255,0.5);
+      color: #fff;
+      box-shadow: 0 0 0 2px #1976d2;
+    }
+    .glass-card .btn-login {
+      background: #1976d2;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
+    }
+    .glass-card .btn-login:hover {
+      background: #1565c0;
+    }
+    .glass-card .forgot-link {
+      color: #fff;
+      font-size: 0.95rem;
+      text-decoration: underline;
+      float: right;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+    .glass-card .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      margin: 32px 0 24px 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      justify-content: center;
+    }
+    .glass-card .divider::before, .glass-card .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #fff;
+      margin: 0 12px;
+      opacity: 0.5;
+    }
+    .glass-card .social-login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .glass-card .social-btn {
+      width: 250px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      text-decoration: none;
+    }
+    .glass-card .github-btn {
+      background: #24292f;
+    }
+    .glass-card .github-btn:hover {
+      background: #444c56;
+    }
+    .glass-card .google-btn {
+      background: #db4437;
+    }
+    .glass-card .google-btn:hover {
+      background: #e65748;
+    }
+    .glass-card .register-link {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .glass-card .register-link:hover {
+      color: #90caf9;
+    }
+    .glass-card .footer-link {
+      color: #fff;
+      font-size: 0.95rem;
+      text-decoration: underline;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    /* Responsive */
+    @media (max-width: 500px) {
+      .glass-card {
+        padding: 1.5rem 0.5rem;
+        max-width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Abstract background shapes -->
+  <div class="bg-shape bg-shape1"></div>
+  <div class="bg-shape bg-shape2"></div>
+  <div class="bg-shape bg-shape3"></div>
+  <div class="bg-shape bg-shape4"></div>
+
+  <div class="login-container">
+    <div class="glass-card">
+      <div class="d-flex align-items-center justify-content-center mb-3" style="gap: 0.5rem;">
+        <i class="bi bi-buildings fs-2 text-primary"></i>
+        <strong style="font-size:1.3rem; color:#ffffff;">BrightWorks</strong>
+      </div>
+      <h2>Login</h2>
+      <div id="loginError" style="display:none;color:#ffb3b3;background:#fff3f3;padding:10px;border-radius:8px;margin-bottom:10px;"></div>
+      <form id="loginForm" action="/login" method="POST" autocomplete="off">
+        <div class="mb-2 text-start">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" placeholder="username@gmail.com" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
+        <div class="mb-2 text-end">
+          <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn btn-login">Sign in</button>
+      </form>
+      <div class="divider">or continue with</div>
+      <div class="social-login-container">
+        <a href="/auth/github" class="social-btn github-btn">Log in with GitHub</a>
+        <a href="/auth/google" class="social-btn google-btn" style="background:#db4437;">Log in with Google</a>
+      </div>
+      <div style="margin-top:1rem;">
+        Don't have an account?
+        <a href="/register" class="register-link">Register for free</a>
+      </div>
+      <a href="/index" class="footer-link">Back to Home</a>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.style.display = 'none';
+    errorDiv.textContent = '';
+    if (this.checkValidity()) {
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (response.ok) {
+        sessionStorage.setItem('loginSuccess', '1');
+        window.location.href = '/index';
+      } else {
+        let msg = 'Login failed.';
+        try {
+          const resJson = await response.json();
+          if (resJson.message) msg = resJson.message;
+        } catch {}
+        errorDiv.textContent = msg;
+        errorDiv.style.display = 'block';
+      }
+    } else {
+      alert("⚠️ Please fill out all fields correctly.");
+    }
+  });
+  </script>
+</body>
+</html>

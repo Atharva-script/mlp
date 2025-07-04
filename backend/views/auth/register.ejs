@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+      overflow: auto;
+      position: relative;
+    }
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 1;
+      filter: blur(2px);
+    }
+    .bg-shape1 { width: 300px; height: 300px; background: #fff; top: 5%; left: 5%; }
+    .bg-shape2 { width: 200px; height: 200px; background: #90caf9; top: 60%; left: 70%; }
+    .bg-shape3 { width: 150px; height: 150px; background: #1976d2; top: 80%; left: 10%; }
+    .bg-shape4 { width: 100px; height: 100px; background: #fff; top: 30%; left: 80%; }
+    .login-container {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 3rem 2.5rem 2.5rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .glass-card h2 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1.7rem;
+    }
+    .glass-card .form-label {
+      color: #fff;
+      font-weight: 500;
+      text-align: left;
+      width: 100%;
+    }
+    .glass-card .form-control {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    .glass-card .form-control::placeholder {
+      color: #fff;
+      opacity: 0.8;
+    }
+    .glass-card .form-control:focus {
+      background: rgba(255,255,255,0.5);
+      color: #fff;
+      box-shadow: 0 0 0 2px #1976d2;
+    }
+    .glass-card .btn-register {
+      background: #1976d2;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
+    }
+    .glass-card .btn-register:hover {
+      background: #1565c0;
+    }
+    .glass-card .footer-link {
+      color: #fff;
+      font-size: 0.95rem;
+      text-decoration: underline;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+    .glass-card .form-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .glass-card .form-footer a {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    iframe {
+      border: 0;
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    @media (max-width: 500px) {
+      .glass-card {
+        padding: 1.5rem 0.5rem;
+        max-width: 98vw;
+      }
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      margin: 32px 0 24px 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      justify-content: center;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #fff;
+      margin: 0 12px;
+      opacity: 0.5;
+    }
+    .social-login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .social-btn {
+      width: 250px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      text-decoration: none;
+    }
+    .github-btn {
+      background: #24292f;
+    }
+    .github-btn:hover {
+      background: #444c56;
+    }
+    .facebook-btn {
+      background: #1877f3;
+    }
+    .facebook-btn:hover {
+      background: #145db2;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-shape bg-shape1"></div>
+  <div class="bg-shape bg-shape2"></div>
+  <div class="bg-shape bg-shape3"></div>
+  <div class="bg-shape bg-shape4"></div>
+
+  <div class="login-container">
+    <div class="glass-card">
+      <div class="d-flex align-items-center justify-content-center mb-3" style="gap: 0.5rem;">
+        <strong style="font-size:1.3rem;color:#ffffff;">BrightWorks</strong>
+      </div>
+      <h2>Register</h2>
+      <form id="regForm" autocomplete="off">
+        <div class="mb-2 text-start">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-control" name="firstName" placeholder="First Name" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-control" name="lastName" placeholder="Last Name" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Gender</label><br/>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" value="Male" required>
+            <label class="form-check-label">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" value="Female" required>
+            <label class="form-check-label">Female</label>
+          </div>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Phone Number (India)</label>
+          <input type="tel" class="form-control" name="phone" pattern="^[789]\d{9}$" placeholder="Phone Number +91" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" pattern="^[\w.-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$" placeholder="Email" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" name="password"
+            pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+            title="Min 8 chars, 1 capital, 1 number, 1 special character"
+            placeholder="Password" required>
+        </div>
+        <div class="mb-2 text-start">
+          <label class="form-label">Your Location</label>
+          <input type="text" class="form-control" name="location" placeholder="Location" required>
+        </div>
+        <button type="submit" class="btn btn-register">Register</button>
+        <div class="divider">or sign up with</div>
+        <div class="social-login-container">
+          <a href="/auth/github" class="social-btn github-btn">Sign up with GitHub</a>
+          <a href="/auth/google" class="social-btn" style="background:#db4437;">Sign up with Google</a>
+        </div>
+      </form>
+      <div class="form-footer mt-3">
+        Already a user? <a href="/" class="register-link">Log in now</a>
+        <br>
+        <a href="/index" class="footer-link">Back to Home</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("regForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      if (this.checkValidity()) {
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (response.ok) {
+          window.location.href = '/index';
+        } else {
+          alert('Registration failed.');
+        }
+      } else {
+        alert("⚠️ Please fill out all fields correctly.");
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
