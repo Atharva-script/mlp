@@ -36,7 +36,7 @@ passport.deserializeUser((obj, done) => {
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://localhost:3001/auth/github/callback"
+  callbackURL: process.env.GITHUB_CALLBACK_URL
 }, function(accessToken, refreshToken, profile, done) {
   // Save user info to notes.json if not already present
   const userData = {
@@ -46,6 +46,7 @@ passport.use(new GitHubStrategy({
     emails: profile.emails,
     provider: profile.provider
   };
+  // Read file async, but don't block authentication
   fs.readFile('notes.json', 'utf8', (err, data) => {
     let notes = [];
     if (!err && data) {
@@ -54,7 +55,9 @@ passport.use(new GitHubStrategy({
     // Only add if user not already present
     if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
       notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), () => {});
+      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
+        if (err) console.error('Error writing notes.json:', err);
+      });
     }
   });
   return done(null, profile);
@@ -74,6 +77,7 @@ function(accessToken, refreshToken, profile, done) {
     emails: profile.emails,
     provider: profile.provider
   };
+  // Read file async, but don't block authentication
   fs.readFile('notes.json', 'utf8', (err, data) => {
     let notes = [];
     if (!err && data) {
@@ -82,7 +86,9 @@ function(accessToken, refreshToken, profile, done) {
     // Only add if user not already present
     if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
       notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), () => {});
+      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
+        if (err) console.error('Error writing notes.json:', err);
+      });
     }
   });
   return done(null, profile);
@@ -150,6 +156,7 @@ app.post('/register', (req, res) => {
     password
   };
 
+  // Read file async, respond immediately, write after
   fs.readFile('notes.json', 'utf8', (err, data) => {
     let notes = [];
     if (!err && data) {
@@ -158,11 +165,13 @@ app.post('/register', (req, res) => {
     // Only add if user not already present
     if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
       notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), () => {});
+      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
+        if (err) console.error('Error writing notes.json:', err);
+      });
     }
   });
 
-  // Redirect or render a success page
+  // Redirect or render a success page immediately
   res.redirect('/index');
 });
 
@@ -191,6 +200,7 @@ app.post('/login', (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid password.' });
     }
+    // Respond immediately
     res.status(200).json({ message: 'Login successful' });
   });
 });
