@@ -32,19 +32,21 @@ app.use(passport.session());
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch((err) => {
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => {
   console.error('MongoDB connection error:', err);
+  process.exit(1);
 });
 
-// User schema
+// User schema/model
 const userSchema = new mongoose.Schema({
-  id: String,
+  id: { type: String, required: true },
   username: String,
   displayName: String,
   emails: [{ value: String }],
-  provider: String,
+  provider: { type: String, required: true },
+  avatar: String,
   phone: String,
   gender: String,
   location: String,
@@ -69,13 +71,15 @@ passport.use(new GitHubStrategy({
       username: profile.username,
       displayName: profile.displayName,
       emails: profile.emails,
-      provider: profile.provider
+      provider: profile.provider,
+      avatar: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : undefined
     };
-    let user = await User.findOne({ id: userData.id, provider: userData.provider });
-    if (!user) {
-      user = new User(userData);
-      await user.save();
-    }
+    // Upsert: create or update user by id+provider
+    const user = await User.findOneAndUpdate(
+      { id: userData.id, provider: userData.provider },
+      { $set: userData },
+      { new: true, upsert: true }
+    );
     return done(null, user);
   } catch (err) {
     console.error('GitHubStrategy error:', err);
@@ -87,28 +91,28 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
-},
-async function(accessToken, refreshToken, profile, done) {
+}, async function(accessToken, refreshToken, profile, done) {
   try {
     const userData = {
       id: profile.id,
       username: profile.displayName || profile.username || null,
       displayName: profile.displayName,
       emails: profile.emails,
-      provider: profile.provider
+      provider: profile.provider,
+      avatar: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : undefined
     };
-    let user = await User.findOne({ id: userData.id, provider: userData.provider });
-    if (!user) {
-      user = new User(userData);
-      await user.save();
-    }
+    // Upsert: create or update user by id+provider
+    const user = await User.findOneAndUpdate(
+      { id: userData.id, provider: userData.provider },
+      { $set: userData },
+      { new: true, upsert: true }
+    );
     return done(null, user);
   } catch (err) {
     console.error('GoogleStrategy error:', err);
     return done(err, null);
   }
-}
-));
+}));
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated && req.isAuthenticated()) {
@@ -160,7 +164,7 @@ app.get('/auth/google/callback',
 app.post('/register', async (req, res) => {
   const { email, password, firstName, lastName, phone, gender, location } = req.body;
   const userData = {
-    id: email, // Use email as unique ID for local registration
+    id: email,
     username: email,
     displayName: `${firstName} ${lastName}`,
     emails: [{ value: email }],
