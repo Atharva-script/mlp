@@ -63,7 +63,7 @@ passport.use(new GitHubStrategy({
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "/auth/google/callback"
+  callbackURL: "/https://mlp-7.onrender.com/auth/google/callback"
 },
 function(accessToken, refreshToken, profile, done) {
   // Save user info to notes.json if not already present
