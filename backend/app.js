@@ -8,6 +8,7 @@ const session = require('express-session');
 const passport = require('passport');
 const fs = require('fs');
 const FileStore = require('session-file-store')(session);
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -27,6 +28,30 @@ app.set("view engine", "ejs");
 app.use(passport.initialize());
 app.use(passport.session());
 
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+// User schema
+const userSchema = new mongoose.Schema({
+  id: String,
+  username: String,
+  displayName: String,
+  emails: [{ value: String }],
+  provider: String,
+  phone: String,
+  gender: String,
+  location: String,
+  password: String
+});
+const User = mongoose.model('User', userSchema);
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -37,30 +62,25 @@ passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: process.env.GITHUB_CALLBACK_URL
-}, function(accessToken, refreshToken, profile, done) {
-  // Save user info to notes.json if not already present
-  const userData = {
-    id: profile.id,
-    username: profile.username,
-    displayName: profile.displayName,
-    emails: profile.emails,
-    provider: profile.provider
-  };
-  // Read file async, but don't block authentication
-  fs.readFile('notes.json', 'utf8', (err, data) => {
-    let notes = [];
-    if (!err && data) {
-      try { notes = JSON.parse(data); } catch (e) { notes = []; }
+}, async function(accessToken, refreshToken, profile, done) {
+  try {
+    const userData = {
+      id: profile.id,
+      username: profile.username,
+      displayName: profile.displayName,
+      emails: profile.emails,
+      provider: profile.provider
+    };
+    let user = await User.findOne({ id: userData.id, provider: userData.provider });
+    if (!user) {
+      user = new User(userData);
+      await user.save();
     }
-    // Only add if user not already present
-    if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
-      notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
-        if (err) console.error('Error writing notes.json:', err);
-      });
-    }
-  });
-  return done(null, profile);
+    return done(null, user);
+  } catch (err) {
+    console.error('GitHubStrategy error:', err);
+    return done(err, null);
+  }
 }));
 
 passport.use(new GoogleStrategy({
@@ -68,30 +88,25 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 },
-function(accessToken, refreshToken, profile, done) {
-  // Save user info to notes.json if not already present
-  const userData = {
-    id: profile.id,
-    username: profile.displayName || profile.username || null,
-    displayName: profile.displayName,
-    emails: profile.emails,
-    provider: profile.provider
-  };
-  // Read file async, but don't block authentication
-  fs.readFile('notes.json', 'utf8', (err, data) => {
-    let notes = [];
-    if (!err && data) {
-      try { notes = JSON.parse(data); } catch (e) { notes = []; }
+async function(accessToken, refreshToken, profile, done) {
+  try {
+    const userData = {
+      id: profile.id,
+      username: profile.displayName || profile.username || null,
+      displayName: profile.displayName,
+      emails: profile.emails,
+      provider: profile.provider
+    };
+    let user = await User.findOne({ id: userData.id, provider: userData.provider });
+    if (!user) {
+      user = new User(userData);
+      await user.save();
     }
-    // Only add if user not already present
-    if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
-      notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
-        if (err) console.error('Error writing notes.json:', err);
-      });
-    }
-  });
-  return done(null, profile);
+    return done(null, user);
+  } catch (err) {
+    console.error('GoogleStrategy error:', err);
+    return done(err, null);
+  }
 }
 ));
 
@@ -142,7 +157,7 @@ app.get('/auth/google/callback',
   }
 );
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { email, password, firstName, lastName, phone, gender, location } = req.body;
   const userData = {
     id: email, // Use email as unique ID for local registration
@@ -155,42 +170,26 @@ app.post('/register', (req, res) => {
     location,
     password
   };
-
-  // Read file async, respond immediately, write after
-  fs.readFile('notes.json', 'utf8', (err, data) => {
-    let notes = [];
-    if (!err && data) {
-      try { notes = JSON.parse(data); } catch (e) { notes = []; }
+  try {
+    let user = await User.findOne({ id: userData.id, provider: userData.provider });
+    if (!user) {
+      user = new User(userData);
+      await user.save();
     }
-    // Only add if user not already present
-    if (!notes.find(u => u.id === userData.id && u.provider === userData.provider)) {
-      notes.push(userData);
-      fs.writeFile('notes.json', JSON.stringify(notes, null, 2), (err) => {
-        if (err) console.error('Error writing notes.json:', err);
-      });
-    }
-  });
-
-  // Redirect or render a success page immediately
-  res.redirect('/index');
+    res.redirect('/index');
+  } catch (err) {
+    console.error('Register error:', err);
+    res.status(500).send('Registration failed');
+  }
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  fs.readFile('notes.json', 'utf8', (err, data) => {
-    let users = [];
-    if (!err && data) {
-      try { users = JSON.parse(data); } catch (e) { users = []; }
-    }
-    // Debug: log users and incoming credentials
-    console.log('Login attempt:', email, password);
-    console.log('Users:', users);
-    // Find local user (manual registration)
-    const user = users.find(u =>
-      u.provider === 'local' &&
-      u.emails && u.emails[0] &&
-      u.emails[0].value === email
-    );
+  try {
+    const user = await User.findOne({
+      provider: 'local',
+      'emails.0.value': email
+    });
     if (!user) {
       return res.status(401).json({ message: 'No such user registered.' });
     }
@@ -200,9 +199,11 @@ app.post('/login', (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid password.' });
     }
-    // Respond immediately
     res.status(200).json({ message: 'Login successful' });
-  });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Login failed' });
+  }
 });
 
 module.exports = app;
